@@ -129,7 +129,7 @@ public class AccountService {
     public void finalizeTransfer(MoneyTransferRequest transferRequest) {
         Optional<Account> accountOptional = accountRepository.findById(transferRequest.getFromId());
         accountOptional.ifPresentOrElse(account -> {
-            String notificationMessage = "Değerli müşterimiz %s \n \n" +
+            String notificationMessage = "Değerli müşterimiz %s \n" +
                     "Para transferi talebiniz başarılı oldu. Yeni bakiyeniz: %s";
             System.out.println("Gönderen(" + account.getId() + ") Hesap Bakiyeniz: " + account.getBalance());
             String senderMessage = String.format(notificationMessage, account.getId(), account.getBalance());
@@ -138,9 +138,9 @@ public class AccountService {
 
         Optional<Account> accountToOptional = accountRepository.findById(transferRequest.getToId());
         accountToOptional.ifPresentOrElse(account -> {
-            String notificationMessage = "Değerli müşterimizr %s \n para transferi aldınız. Yeni bakiyeniz:%s";
+            String notificationMessage = "Değerli müşterimiz %s \n para transferi aldınız. Yeni bakiyeniz:%s";
             System.out.println("Alıcı(" + account.getId() + ") Hesap Bakiyesi: " + account.getBalance());
-            String receiverMessage = String.format(notificationMessage, account.getId(), transferRequest.getFromId(), account.getBalance());
+            String receiverMessage = String.format(notificationMessage, account.getId(),account.getBalance());
             kafkaTemplate.send("transfer-notification", receiverMessage);
         }, () -> System.out.println("Hesap Bulunamadı"));
 
